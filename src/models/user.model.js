@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt';
-import jwt from 'json-web-token';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -76,32 +76,33 @@ const userSchema = new mongoose.Schema(
     }
 
 
-    userSchema.methods.generateAccessToken = function(){
-    console.log("AccessToken block");
-        // return jwt.sign(
-        //     {
-        //         _id: this._id,
-        //         username: this.username,
-        //         email: this.email,
-        //         fullName: this.fullName
+    userSchema.methods.generateAccessToken = function () {
 
-        //     },process.env.ACCESS_TOKEN_SECRET,{expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
-        // )
-        return jwt.sign(
-            {
-                _id: this._id,
-                email: this.email,
-                username: this.username,
-                fullName: this.fullName
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            {
-                expiresIn: process.env.ACCESS_TOKEN_EXPIRY
-            }
-        )
-    }
+    const payload ={_id: this._id};
+    const secrettKey = process.env.ACCESS_TOKEN_SECRET;
+    const expiry=process.env.ACCESS_TOKEN_EXPIRY;
+    // console.log(payload,secrettKey,expiry)
+
+    const token = jwt.sign(payload,secrettKey,{expiresIn: expiry});
+    // console.log(token);
+    return token
+
+
+
+        // return jwt.sign(
+        //   {
+        //     _id: this._id,
+        //     username: this.username,
+        //     email: this.email,
+        //     fullName: this.fullName
+        //   },
+        //   process.env.ACCESS_TOKEN_SECRET,
+        //   { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+        // );
+      };
+      
     userSchema.methods.generateRefreshToken = function(){
-    console.log("there");
+    // console.log("there");
         return jwt.sign(
             {
             _id: this.id,

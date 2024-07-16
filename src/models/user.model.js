@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from 'bcrypt';
-import jwt from 'json-web-token'
+import jwt from 'json-web-token';
 
 
 
@@ -77,18 +77,32 @@ const userSchema = new mongoose.Schema(
 
 
     userSchema.methods.generateAccessToken = function(){
-        jwt.sign(
+    console.log("AccessToken block");
+        // return jwt.sign(
+        //     {
+        //         _id: this._id,
+        //         username: this.username,
+        //         email: this.email,
+        //         fullName: this.fullName
+
+        //     },process.env.ACCESS_TOKEN_SECRET,{expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
+        // )
+        return jwt.sign(
             {
                 _id: this._id,
-                username: this.username,
                 email: this.email,
+                username: this.username,
                 fullName: this.fullName
-
-            },process.env.ACCESS_TOKEN_SECRET,{expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+            }
         )
     }
     userSchema.methods.generateRefreshToken = function(){
-        jwt.sign(
+    console.log("there");
+        return jwt.sign(
             {
             _id: this.id,
             },process.env.REFRESH_TOKEN_SECRET,{expiresIn: process.env.REFRESH_TOKEN_EXPIRY}

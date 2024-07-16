@@ -6,9 +6,9 @@ import fs from 'fs'
 
     // Configuration
     cloudinary.config({ 
-        cloud_name: 'drqard4qh', 
-        api_key: '623977959327823', 
-        api_secret: 'qBSklGYLRZg_t3rRcoY-DAAP9IE' // Click 'View Credentials' below to copy your API secret
+        cloud_name: process.env.CLOUDINARY_NAME, 
+        api_key: process.env.CLOUDINARY_API_KEY, 
+        api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View Credentials' below to copy your API secret
     });
     
     // Upload an image
@@ -22,7 +22,8 @@ import fs from 'fs'
                resource_type: 'auto'
            }
        )
-       console.log("file added successfully",uploadResult);
+    //    console.log("file added successfully",uploadResult);
+       fs.unlinkSync(localFilePath)
        return uploadResult
     }
        catch(error) {

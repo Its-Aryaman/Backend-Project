@@ -361,7 +361,26 @@ const user =  await User.findByIdAndUpdate(req.user?._id,
 
 })
 
+const uploadVideo = asyncHandler( async(req,res) => {
 
+const localVideo = await req.file?.path
+
+if(!localVideo)
+ throw new ApiError(401,"Video not uploaded");
+
+ console.log(localVideo);
+
+
+const video=await uploadOnCloudinary(localVideo);
+
+console.log(video);
+
+if(!video)
+ throw new ApiError(500,"cloudinary server error");
+
+return res.status(201).json( new ApiResponse(201,"video uploaded"));
+
+})
 
 
 
@@ -424,6 +443,7 @@ changeuserPassword,
 getCurrentUser,
 updateAccountDetails,
 updateUserAvatar,
-updateUserCoverImage
+updateUserCoverImage,
+uploadVideo
 }
 
